@@ -45,44 +45,64 @@ m_preProcess = PreProcess(project=m_findsDir.returnDirName(),
                           input_file_name=inputFileName)
 
 (x_train, y_train) = m_preProcess.makeDataSet()
-x_train = x_train[:-1]
-for data in x_train:
-    data/=data.max()
-y_train = y_train[:-1].astype(np.int32)
-y_train-=1
+m_preProcess.maxNorm(x_train)
+x_train, y_train = m_preProcess.catchNone(x_train, y_train)
+y_train = m_preProcess.changeLabel(y_train)
+
+# nr34:155, nr2: 395, nr1: 37, rem: 165, wake: 41
+x_nr34 = np.array([])
+x_nr2 = np.array([])
+x_nr1 = np.array([])
+x_rem = np.array([])
+x_wake = np.array([])
+
+for num, ss in enumerate(y_train):
+    if ss == 0:
+        x_nr34 = np.append(x_nr34, x_train[num])
+    elif ss == 1:
+        x_nr2 = np.append(x_nr2, x_train[num])
+    elif ss == 2:
+        x_nr1 = np.append(x_nr1, x_train[num])
+    elif ss == 3:
+        x_rem = np.append(x_rem, x_train[num])
+    elif ss == 4:
+        x_wake = np.append(x_wake, x_train[num])
+
+x_nr34 = x_nr34.reshape(-1, 128, 512)
+x_nr2 = x_nr2.reshape(-1, 128, 512)
+x_nr1 = x_nr1.reshape(-1, 128, 512)
+x_rem = x_rem.reshape(-1, 128, 512)
+x_wake = x_wake.reshape(-1, 128, 512)
 
 attentionArray = []
 confArray = []
 
-convertedArray = [x_train]
+convertedArray = [x_nr1, x_nr2, x_nr34, x_rem, x_wake]
 
 for num, inputs in enumerate(convertedArray):
     attention = new_model.predict(inputs)
-    if num == 0 or num == 1:
+    if num == 0:
         labelNum = 2
-    elif num == 2 or num == 3:
-        labelNum = 3
-    elif num == 4 or num == 5:
-        labelNum = 4
-    elif num == 6 or num == 7:
+    elif num == 1:
         labelNum = 1
-    else:
+    elif num == 2:
         labelNum = 0
+    elif num == 3:
+        labelNum = 3
+    elif num == 4:
+        labelNum = 4
+    else:
+        labelNum = None
     conf = tf.math.softmax(model.predict(inputs))[:, labelNum]
     attentionArray.append(attention)
     confArray.append(conf)
 
 pathRoot = "c:/users/taiki/sleep_study/figures/"
 savedDirList = ["nr1_attention_train/",
-                "nr1_attention_test/",
                 "nr2_attention_train/",
-                "nr2_attention_test/",
                 "nr34_attention_train/",
-                "nr34_attention_test/",
                 "rem_attention_train/",
-                "rem_attention_test/",
-                "wake_attention_train/",
-                "wake_attention_test/"]
+                "wake_attention_train/"]
 savedDirList = [pathRoot + savedDir for savedDir in savedDirList]
 
 for num, target in enumerate(attentionArray):
