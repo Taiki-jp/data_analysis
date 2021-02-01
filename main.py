@@ -9,10 +9,9 @@ physical_devices = tf.config.list_physical_devices("GPU")
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
 tf.keras.backend.set_floatx('float32')
 from utils import PreProcess
-from model_base import CreateModelBase
 from glob import glob
 from pprint import pprint
-
+import numpy as np
 # ================================================ #
 # *          モデルの読み込みと作成
 # ================================================ #
@@ -25,7 +24,7 @@ print("一番新しいモデルが最後に来ていることを確認")
 model = tf.keras.models.load_model(modelList[-1])
 # 入力と出力を決める
 new_input = model.input
-new_output = model.get_layer('my_attention1d').output
+new_output = model.get_layer('my_attention2d').output
 new_model = tf.keras.Model(new_input, new_output)
 
 # ================================================ #
@@ -41,26 +40,21 @@ new_model.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logi
 # ================================================ #
 
 m_findsDir = FindsDir("sleep")
-inputFileName = input("*** 入力データを入れてください *** \n")
+inputFileName = input("*** 被験者データを入れてください *** \n")
 m_preProcess = PreProcess(project=m_findsDir.returnDirName(), 
                           input_file_name=inputFileName)
 
-nr1_train, nr2_train, nr34_train, rem_train, wake_train = m_preProcess.makeEachSleepStageTrainData()
-nr1_test, nr2_test, nr34_test, rem_test, wake_test = m_preProcess.makeEachSleepStageTrainData()
-
-convertedArray = [nr1_train, 
-                  nr1_test,
-                  nr2_train,
-                  nr2_test,
-                  nr34_train,
-                  nr34_test,
-                  rem_train,
-                  rem_test,
-                  wake_train,
-                  wake_test]
+(x_train, y_train) = m_preProcess.makeDataSet()
+x_train = x_train[:-1]
+for data in x_train:
+    data/=data.max()
+y_train = y_train[:-1].astype(np.int32)
+y_train-=1
 
 attentionArray = []
 confArray = []
+
+convertedArray = [x_train]
 
 for num, inputs in enumerate(convertedArray):
     attention = new_model.predict(inputs)
