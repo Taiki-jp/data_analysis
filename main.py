@@ -23,7 +23,7 @@ modelList = glob(modelDirPath+'*')
 print("*** this is model list ***")
 pprint(modelList)
 print("一番新しいモデルが最後に来ていることを確認")
-model = tf.keras.models.load_model(modelList[-1])
+model = tf.keras.models.load_model(modelList[-2])
 # 入力と出力を決める
 new_input = model.input
 new_output = model.get_layer('my_attention2d').output
@@ -52,29 +52,30 @@ x_train, y_train = m_preProcess.catchNone(x_train, y_train)
 y_train = m_preProcess.changeLabel(y_train)
 
 # nr34:155, nr2: 395, nr1: 37, rem: 165, wake: 41
-x_nr34 = np.array([])
-x_nr2 = np.array([])
-x_nr1 = np.array([])
-x_rem = np.array([])
-x_wake = np.array([])
+
+x_nr34 = list()
+x_nr2 = list()
+x_nr1 = list()
+x_rem = list()
+x_wake = list()
 
 for num, ss in enumerate(y_train):
     if ss == 0:
-        x_nr34 = np.append(x_nr34, x_train[num])
+        x_nr34.append(x_train[num])
     elif ss == 1:
-        x_nr2 = np.append(x_nr2, x_train[num])
+        x_nr2.append(x_train[num])
     elif ss == 2:
-        x_nr1 = np.append(x_nr1, x_train[num])
+        x_nr1.append(x_train[num])
     elif ss == 3:
-        x_rem = np.append(x_rem, x_train[num])
+        x_rem.append(x_train[num])
     elif ss == 4:
-        x_wake = np.append(x_wake, x_train[num])
+        x_wake.append(x_train[num])
 
-x_nr34 = x_nr34.reshape(-1, 128, 512)
-x_nr2 = x_nr2.reshape(-1, 128, 512)
-x_nr1 = x_nr1.reshape(-1, 128, 512)
-x_rem = x_rem.reshape(-1, 128, 512)
-x_wake = x_wake.reshape(-1, 128, 512)
+x_nr34 = np.array(x_nr34)
+x_nr2 = np.array(x_nr2)
+x_nr1 = np.array(x_nr1)
+x_rem = np.array(x_rem)
+x_wake = np.array(x_wake)
 
 attentionArray = []
 confArray = []
@@ -113,6 +114,6 @@ for num, target in enumerate(attentionArray):
                              row_image_array = convertedArray[num],
                              file_path = savedDirList[num],
                              x_label = "time",
-                             y_label = "freqency",
+                             y_label = "frequency",
                              title_array = confArray[num])
     
