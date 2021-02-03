@@ -42,9 +42,9 @@ new_model.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logi
 # ================================================ #
 
 m_findsDir = FindsDir("sleep")
-inputFileName = input("*** 被験者データを入れてください *** \n")
+#inputFileName = input("*** 被験者データを入れてください *** \n")
 m_preProcess = PreProcess(project=m_findsDir.returnDirName(), 
-                          input_file_name=inputFileName)
+                          input_file_name="H_Li")
 
 (x_train, y_train) = m_preProcess.makeDataSet()
 m_preProcess.maxNorm(x_train)
@@ -113,7 +113,7 @@ for num, target in enumerate(attentionArray):
     m_preProcess.simpleImage(image_array = target,
                              row_image_array = convertedArray[num],
                              file_path = savedDirList[num],
-                             x_label = "time",
-                             y_label = "frequency",
+                             x_label = "time[s]",
+                             y_label = "frequency[Hz]",
                              title_array = confArray[num])
     
