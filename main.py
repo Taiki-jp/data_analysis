@@ -1,6 +1,7 @@
 # ================================================ #
 # *         Import Some Libraries
 # ================================================ #
+
 from my_setting import FindsDir, SetsPath
 SetsPath().set()
 import os, sys
@@ -8,10 +9,11 @@ import tensorflow as tf
 physical_devices = tf.config.list_physical_devices("GPU")
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
 tf.keras.backend.set_floatx('float32')
-from utils import PreProcess
+from utils import PreProcess, Utils
 from glob import glob
 from pprint import pprint
 import numpy as np
+
 # ================================================ #
 # *          モデルの読み込みと作成
 # ================================================ #
