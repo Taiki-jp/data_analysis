@@ -23,7 +23,7 @@ modelList = glob(modelDirPath+'*')
 print("*** this is model list ***")
 pprint(modelList)
 print("一番新しいモデルが最後に来ていることを確認")
-model = tf.keras.models.load_model(modelList[-2])
+model = tf.keras.models.load_model(modelList[-1])
 # 入力と出力を決める
 new_input = model.input
 new_output = model.get_layer('my_attention2d').output
@@ -44,12 +44,15 @@ new_model.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logi
 m_findsDir = FindsDir("sleep")
 #inputFileName = input("*** 被験者データを入れてください *** \n")
 m_preProcess = PreProcess(project=m_findsDir.returnDirName(), 
-                          input_file_name="H_Li")
+                          input_file_name=Utils().name_dict)
 
-(x_train, y_train) = m_preProcess.makeDataSet()
+(x_train, y_train), (x_test, y_test) = m_preProcess.makeDataSet(is_split=True)
 m_preProcess.maxNorm(x_train)
-x_train, y_train = m_preProcess.catchNone(x_train, y_train)
-y_train = m_preProcess.changeLabel(y_train)
+m_preProcess.maxNorm(x_test)
+(x_train, y_train) = m_preProcess.catchNone(x_train, y_train)
+(x_test, y_test) = m_preProcess.catchNone(x_test, y_test)
+y_train = m_preProcess.changeLabel(y_train)  # Counter({2: 346, 1: 2975, 0: 159, 3: 1105, 4: 458})
+y_test = m_preProcess.changeLabel(y_test)  # Counter({2: 49, 1: 365, 4: 41, 0: 22, 3: 79})
 
 # nr34:155, nr2: 395, nr1: 37, rem: 165, wake: 41
 
