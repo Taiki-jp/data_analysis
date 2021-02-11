@@ -41,6 +41,7 @@ new_model.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logi
 # *                データの作成
 # ================================================ #
 
+SLEEP_STAGE = 5
 m_findsDir = FindsDir("sleep")
 #inputFileName = input("*** 被験者データを入れてください *** \n")
 m_preProcess = PreProcess(project=m_findsDir.returnDirName(), 
@@ -49,13 +50,13 @@ m_preProcess = PreProcess(project=m_findsDir.returnDirName(),
 (x_train, y_train), (x_test, y_test) = m_preProcess.makeDataSet(train=train, 
                                                                 test=test, 
                                                                 is_split=True, 
-                                                                target_ss=5)
+                                                                target_ss=SLEEP_STAGE)
 m_preProcess.maxNorm(x_train)
 m_preProcess.maxNorm(x_test)
 (x_train, y_train) = m_preProcess.catchNone(x_train, y_train)
 (x_test, y_test) = m_preProcess.catchNone(x_test, y_test)
-y_train = m_preProcess.binClassChanger(y_train, 5)  # Counter({2: 346, 1: 2975, 0: 159, 3: 1105, 4: 458})
-y_test = m_preProcess.binClassChanger(y_test, 5)  # Counter({2: 49, 1: 365, 4: 41, 0: 22, 3: 79})
+y_train = m_preProcess.binClassChanger(y_train, SLEEP_STAGE)  # Counter({2: 346, 1: 2975, 0: 159, 3: 1105, 4: 458})
+y_test = m_preProcess.binClassChanger(y_test, SLEEP_STAGE)  # Counter({2: 49, 1: 365, 4: 41, 0: 22, 3: 79})
 
 # nr34:155, nr2: 395, nr1: 37, rem: 165, wake: 41
 
