@@ -26,7 +26,7 @@ print("一番新しいモデルが最後に来ていることを確認")
 model = tf.keras.models.load_model(modelList[-1])
 # 入力と出力を決める
 new_input = model.input
-new_output = model.get_layer('my_attention2d').output
+new_output = model.get_layer('my_attention2d_4').output
 new_model = tf.keras.Model(new_input, new_output)
 
 # ================================================ #
@@ -45,58 +45,43 @@ m_findsDir = FindsDir("sleep")
 #inputFileName = input("*** 被験者データを入れてください *** \n")
 m_preProcess = PreProcess(project=m_findsDir.returnDirName(), 
                           input_file_name=Utils().name_dict)
-
-(x_train, y_train), (x_test, y_test) = m_preProcess.makeDataSet(is_split=True)
+(train, test) = m_preProcess.loadData(is_split=True)
+(x_train, y_train), (x_test, y_test) = m_preProcess.makeDataSet(train=train, 
+                                                                test=test, 
+                                                                is_split=True, 
+                                                                target_ss=5)
 m_preProcess.maxNorm(x_train)
 m_preProcess.maxNorm(x_test)
 (x_train, y_train) = m_preProcess.catchNone(x_train, y_train)
 (x_test, y_test) = m_preProcess.catchNone(x_test, y_test)
-y_train = m_preProcess.changeLabel(y_train)  # Counter({2: 346, 1: 2975, 0: 159, 3: 1105, 4: 458})
-y_test = m_preProcess.changeLabel(y_test)  # Counter({2: 49, 1: 365, 4: 41, 0: 22, 3: 79})
+y_train = m_preProcess.binClassChanger(y_train, 5)  # Counter({2: 346, 1: 2975, 0: 159, 3: 1105, 4: 458})
+y_test = m_preProcess.binClassChanger(y_test, 5)  # Counter({2: 49, 1: 365, 4: 41, 0: 22, 3: 79})
 
 # nr34:155, nr2: 395, nr1: 37, rem: 165, wake: 41
 
-x_nr34 = list()
-x_nr2 = list()
-x_nr1 = list()
-x_rem = list()
-x_wake = list()
+non_target = list()
+target = list()
 
 for num, ss in enumerate(y_train):
     if ss == 0:
-        x_nr34.append(x_train[num])
+        non_target.append(x_train[num])
     elif ss == 1:
-        x_nr2.append(x_train[num])
-    elif ss == 2:
-        x_nr1.append(x_train[num])
-    elif ss == 3:
-        x_rem.append(x_train[num])
-    elif ss == 4:
-        x_wake.append(x_train[num])
+        target.append(x_train[num])
 
-x_nr34 = np.array(x_nr34)
-x_nr2 = np.array(x_nr2)
-x_nr1 = np.array(x_nr1)
-x_rem = np.array(x_rem)
-x_wake = np.array(x_wake)
+non_target = np.array(non_target)
+target = np.array(target)
 
 attentionArray = []
 confArray = []
 
-convertedArray = [x_nr1, x_nr2, x_nr34, x_rem, x_wake]
+convertedArray = [non_target, target]
 
 for num, inputs in enumerate(convertedArray):
     attention = new_model.predict(inputs)
     if num == 0:
-        labelNum = 2
+        labelNum = 0
     elif num == 1:
         labelNum = 1
-    elif num == 2:
-        labelNum = 0
-    elif num == 3:
-        labelNum = 3
-    elif num == 4:
-        labelNum = 4
     else:
         labelNum = None
     conf = tf.math.softmax(model.predict(inputs))[:, labelNum]
@@ -104,11 +89,7 @@ for num, inputs in enumerate(convertedArray):
     confArray.append(conf)
 
 pathRoot = "c:/users/taiki/sleep_study/figures/"
-savedDirList = ["nr1_attention_train/",
-                "nr2_attention_train/",
-                "nr34_attention_train/",
-                "rem_attention_train/",
-                "wake_attention_train/"]
+savedDirList = ["non_target/", "target/"]
 savedDirList = [pathRoot + savedDir for savedDir in savedDirList]
 
 for num, target in enumerate(attentionArray):
