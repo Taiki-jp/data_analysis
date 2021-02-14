@@ -35,7 +35,7 @@ modelDirPath = o_FindsDir.modelsDir
 modelList = glob(modelDirPath+'/*')
 #print("*** this is model list ***")
 #pprint(modelList)
-assert modelList[-1] == "c:/users/taiki/sleep_study\\models\\20210212-062410"
+assert modelList[-1] == os.path.join(modelDirPath, "20210214-083230")
 #
 # ================================================ #
 # *          競合したときの処理方法
