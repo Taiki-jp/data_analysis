@@ -38,9 +38,16 @@ class FindsDir(object):
                         "test" : "test",
                         "oxford" : "oxford"}
         self.target_problem = target_problem
+        self.projectDir = os.environ['sleep']
+        self.figureDir = os.path.join(self.projectDir, "figures")
+        self.videoDir = os.path.join(self.projectDir, "videos")
+        self.tmpDir = os.path.join(self.projectDir, "tmps")
+        self.analysisdir = os.path.join(self.projectDir, "analysis")
+        self.modelsDir = os.path.join(self.projectDir, "models")
         
     def returnDirName(self):
         """ディレクトリ名だけが欲しい時はこちらのメソッドを呼び出す
+        NOTE : 初期化メソッド内で別名を辞書のキーとして保存し実際のディレクトリ名を値として入れておくこと
         (ex)
         >> instance = FindsDir("sleep")
         >> instance.returnDirName()
@@ -52,6 +59,8 @@ class FindsDir(object):
         return dirName
     
     def returnFilePath(self):
+        # TODO : 今後削除していく　＝＞　os.environ["sleep"] だけで解決できる
+
         """プロジェクトのパスが欲しい時はこちらのメソッドを呼び出す
         (ex)
         >> instance = FindsDir("sleep")
