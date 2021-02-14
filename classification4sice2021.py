@@ -31,10 +31,15 @@ tf.keras.backend.set_floatx('float32')
 #%%
 o_FindsDir = FindsDir("sleep")
 modelDirPath = o_FindsDir.modelsDir
-# 後の方が時間的に新しい順になっている，w, r, nr1, nr2, nr34
 modelList = glob(modelDirPath+'/*')
-#print("*** this is model list ***")
-#pprint(modelList)
+tmp = list()
+for model in modelList:
+    if model != '\\\\gamma\\Workspace\\TaikiSenju\\sleep_study\\models\\20210214-083230':
+        tmp.append(model)
+    else:
+        tmp.append(model)
+        break
+modelList = tmp
 assert modelList[-1] == os.path.join(modelDirPath, "20210214-083230")
 #
 # ================================================ #
@@ -44,7 +49,7 @@ assert modelList[-1] == os.path.join(modelDirPath, "20210214-083230")
 #inputFileName = input("*** 被験者データを入れてください *** \n")
 for loop_num, name in enumerate(Utils().name_list[::-1]):
     #name = "H_Li"
-    wandb.init(project='sleep 2class data analysis', name = f"{name}",config={"test":True})
+    wandb.init(project='code-test', name = f"{name}")
     #print("だれだれの実験をやっています", name)
     m_preProcess = PreProcess(project=o_FindsDir.returnDirName(), input_file_name=name)
     (x_test, y_test) = m_preProcess.loadData(is_split=True)
@@ -166,16 +171,3 @@ for loop_num, name in enumerate(Utils().name_list[::-1]):
     )
     wandb.finish()
    
-# ================================================ #
-# *          保存したいときの処理
-# ================================================ #
-#%%
-# テストデータ全体の数の確認
-for name in Utils().name_list:
-    print(f"{name}を読み込んでいます")
-    m_preProcess = PreProcess(project=o_FindsDir.returnDirName(), input_file_name=name)
-    (x_test, y_test) = m_preProcess.loadData(is_split=True)
-    print(y_test.shape)
-
-# 外部書き出し
-df_label.to_csv(os.path.join(os.environ["SLEEP"], "datas", f"{name}"+".csv"))
