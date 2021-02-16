@@ -32,16 +32,19 @@ tf.keras.backend.set_floatx('float32')
 o_FindsDir = FindsDir("sleep")
 modelDirPath = o_FindsDir.modelsDir
 modelList = glob(modelDirPath+'/*')
+"""
 tmp = list()
-for model in modelList[::-1]:
+for model in modelList[45::]:
     if model != '\\\\gamma\\Workspace\\TaikiSenju\\sleep_study\\models\\20210215-150631':
         tmp.append(model)
     else:
         tmp.append(model)
         break
 modelList = tmp
-assert modelList[-1] == os.path.join(modelDirPath, "20210215-150631")
-#
+"""
+modelList = modelList[45:]
+# assert modelList[-1] == os.path.join(modelDirPath, "20210215-150631")
+# モデルリストの頭の方にLiさんのデータ後ろの方にYamamotoさんのデータが入っている
 # ================================================ #
 # *          競合したときの処理方法
 # ================================================ #
@@ -64,6 +67,7 @@ for loop_num, name in enumerate(Utils().name_list[::-1]):
     labels_list = ["wake", "rem", "nr1", "nr2", "nr34"]
     list4read_models = np.arange(-1, -6, -1) - 5*loop_num
     for num, i in tqdm(enumerate(list4read_models)):
+        print("読み込むモデル名:", modelList[i])
         model = tf.keras.models.load_model(modelList[i])
         pr = tf.math.softmax(model.predict(x_test))
         for k in range(datasize):
