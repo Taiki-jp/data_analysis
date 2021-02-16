@@ -139,6 +139,7 @@ for loop_num, name in enumerate(Utils().name_list[::-1]):
             one_true_patterns_correct += 1
     one_true_patterns_num = len(multiple_labels_selected_rows)
     #print("NNが複数をもって判断したときの5段階一致率は", one_true_patterns_correct/one_true_patterns_num)
+    wandb.config.update({"how_many_datas_selected_when_mul":one_true_patterns_num})
     wandb.config.update({"acc_selected_mul":one_true_patterns_correct/one_true_patterns_num})
 
     # 一つしか２クラス分類がtrueといわなかったときの正解ラベルとの比較
