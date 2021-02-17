@@ -52,7 +52,7 @@ modelList = modelList[45:]
 #inputFileName = input("*** 被験者データを入れてください *** \n")
 for loop_num, name in enumerate(Utils().name_list[::-1]):
     #name = "H_Li"
-    wandb.init(project='sleep', name = f"{name}")
+    #wandb.init(project='sleep', name = f"{name}")
     #print("だれだれの実験をやっています", name)
     m_preProcess = PreProcess(project=o_FindsDir.returnDirName(), input_file_name=name)
     (x_test, y_test) = m_preProcess.loadData(is_split=True)
