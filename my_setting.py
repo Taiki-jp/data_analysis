@@ -65,7 +65,7 @@ class FindsDir(object):
         (ex)
         >> instance = FindsDir("sleep")
         >> instance.returnFilePath()
-        >> "c:/users/taiki/sleep_study"
+        >> ""
         Returns:
             [type]: [description]
         """

@@ -1,9 +1,6 @@
 import os, sys
 # import numpy as np
 # /nn にいる場合は /data_analysis を追加する必要がある
-sys.path.append(os.environ["USERPROFILE"] + "/git/sleepstudy/pythonscript/data_analysis")
-sys.path.append(os.environ["userprofile"] + "/git/sleepstudy")
-sys.path.append('c:/users/taiki/git/sleepstudy')
 import tensorflow as tf
 physical_devices = tf.config.list_physical_devices("GPU")
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
@@ -12,7 +9,8 @@ import matplotlib.pyplot as plt
 from utils import PreProcess
 import numpy as np
 
-modelDirPath = "c:/users/taiki/git/sleepstudy/model/"
+# TODO : modelDirPath の変更
+# modelDirPath = ""
 modelFilePath = "sleep_model/20210114-154848"
 path = modelDirPath + modelFilePath
 
@@ -69,7 +67,8 @@ for counter, image in enumerate(train_attention):
     ax2.imshow(data[counter], aspect = 'auto')
     ax2.axis('off')
     ax1.set_title(f"conf : {confidence:.1%}, pred label : {predictedLabel}, true label : {trueLabel}", loc = 'left')
-    path1 = "c:/users/taiki/onedrive/desktop/attention_by_inception_channel_size_01"
+    # TODO : path1 の設定
+    path1 = ""
     #if not os.path.exists(path1):
     #    os.mkdir(path1)
     #plt.savefig(f'{path1}/{counter}_{file_path_specifier}.png')

@@ -59,7 +59,8 @@ sns.heatmap(df,
             # xticklabels = 100,
             yticklabels = 64)
 
-filePath = "c:/users/taiki/git/sleepstudy/figure/weights_std.png"
+# TODO : filePath を d:の下に持っていく
+filePath = ""
 plt.savefig(filePath)
 
 
@@ -81,7 +82,8 @@ sns.heatmap(df,
             # xticklabels = 100,
             yticklabels = 64)
 
-filePath = "c:/users/taiki/git/sleepstudy/figure/weights_mean.png"
+# TODO : filePath の設定
+filePath = ""
 plt.savefig(filePath)
 
 
@@ -103,5 +105,6 @@ sns.heatmap(df,
             # xticklabels = 100,
             yticklabels = 64)
 
-filePath = "c:/users/taiki/git/sleepstudy/figure/weights_abs_mean.png"
+# TODO : filePath の設定
+filePath = ""
 plt.savefig(filePath)

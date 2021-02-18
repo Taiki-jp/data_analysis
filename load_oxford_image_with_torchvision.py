@@ -61,7 +61,8 @@ evaluate_transform = transforms.Compose([
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
 
-DATASET_DIR = "c:/users/taiki/git/sleepstudy/oxford_pet"
+# TODO : DATASET_DIR の設定
+DATASET_DIR = ""
 
 train_dataset = ImageFolder(f"{DATASET_DIR}/Train", transform=augment_transform)
 val_dataset = ImageFolder(f"{DATASET_DIR}/Validation", transform=evaluate_transform)

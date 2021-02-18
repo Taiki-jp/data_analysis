@@ -18,7 +18,8 @@ import numpy as np
 # *          モデルの読み込みと作成
 # ================================================ #
 
-modelDirPath = "c:/users/taiki/sleep_study/models/"
+# TODO : modelDirPath の設定
+modelDirPath = ""
 modelList = glob(modelDirPath+'*')
 print("*** this is model list ***")
 pprint(modelList)
@@ -89,7 +90,8 @@ for num, inputs in enumerate(convertedArray):
     attentionArray.append(attention)
     confArray.append(conf)
 
-pathRoot = "c:/users/taiki/sleep_study/figures/"
+# TODO : pathRoot の設定
+pathRoot = ""
 savedDirList = ["non_target/", "target/"]
 savedDirList = [pathRoot + savedDir for savedDir in savedDirList]
 
